@@ -24,7 +24,7 @@ classifiers = [
 
 # Core dependencies
 dependencies = [
-    "apflow[all]>=0.15.0",  # Core library (includes database support)
+    "apflow[all]>=0.16.0",  # Core library (includes database support)
     "fastapi>=0.115.0",              # API framework (already included in a2a, but explicit)
     "python-dotenv>=1.0.0",          # Environment variables
     "pydantic>=2.0.0",                # Data validation

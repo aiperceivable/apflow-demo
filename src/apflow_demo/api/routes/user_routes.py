@@ -54,7 +54,7 @@ def _check_admin_auth(request: Request) -> bool:
         api_algorithm = settings.apflow_jwt_algorithm
         if api_secret:
             payload = verify_token(token, api_secret, api_algorithm)
-            if payload and payload.get("role") == "admin":
+            if payload and isinstance(payload.get("roles", []), list) and "admin" in payload.get("roles", []):
                 logger.debug("Admin auth successful with API server JWT secret")
                 return True
             else:
@@ -84,7 +84,7 @@ def _check_admin_auth(request: Request) -> bool:
                     cli_secret = cli_config["jwt_secret"]
                     cli_algorithm = cli_config.get("jwt_algorithm", "HS256")
                     payload = verify_token(token, cli_secret, cli_algorithm)
-                    if payload and payload.get("role") == "admin":
+                    if payload and isinstance(payload.get("roles", []), list) and "admin" in payload.get("roles", []):
                         logger.debug(f"Admin auth successful with CLI JWT secret from {config_path}")
                         return True
                     else:

@@ -7,6 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 from apflow_demo.extensions.rate_limiter import RateLimiter
 from apflow_demo.config.settings import settings
+from apflow_demo.api.routes.user_routes import _check_admin_auth
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
@@ -14,7 +15,12 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     
     async def dispatch(self, request: Request, call_next):
         """Check rate limit before processing request"""
-        
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
+        if _check_admin_auth(request):
+            return await call_next(request)
+
         # Skip rate limiting for certain paths
         skip_paths = ["/health", "/docs", "/openapi.json", "/redoc"]
         if any(request.url.path.startswith(path) for path in skip_paths):

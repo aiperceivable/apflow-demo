@@ -293,7 +293,7 @@ def _generate_demo_task_for_executor(
         demo_requirements = None
     elif executor_id == "scrape_executor":
         demo_inputs = {
-            "url": "https://aipartnerup.com",
+            "url": "https://aiperceivable.com",
             "extract_metadata": True,
             "max_chars": 5000
         }

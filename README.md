@@ -254,9 +254,9 @@ apflow-demo tasks all --limit 3
 1. **Deploy demo API** (this repository) to your server
 2. **Deploy apflow-webapp** and configure it to point to demo API:
    ```bash
-   NEXT_PUBLIC_API_URL=https://demo-api.aipartnerup.com
+   NEXT_PUBLIC_API_URL=https://demo-api.aiperceivable.com
    ```
-3. **Add demo link** in aipartnerup-website (already configured)
+3. **Add demo link** in aiperceivable-website (already configured)
 
 ## License
 

@@ -34,7 +34,7 @@
 - ✅ **Setup Script**: Created script for initializing demo data
 
 ### 7. Website Integration
-- ✅ **Demo Button**: Added demo button to aipartnerup-website ProjectDetail component
+- ✅ **Demo Button**: Added demo button to aiperceivable-website ProjectDetail component
 - ✅ **Project Data**: Added demo URLs to project data structure
 
 ### 8. Documentation
@@ -66,7 +66,7 @@
 - ⏳ Test end-to-end flow
 
 ### 5. Website Updates
-- ⏳ Update demo URLs in aipartnerup-website environment variables
+- ⏳ Update demo URLs in aiperceivable-website environment variables
 - ⏳ Deploy updated website
 - ⏳ Test demo links
 

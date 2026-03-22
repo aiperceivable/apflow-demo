@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apflow-demo"
-version = "0.7.0"
+version = "0.7.1"
 description = "Demo deployment of apflow with rate limiting and pre-computed results"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    {name = "aipartnerup", email = "tercel.yi@gmail.com"}
+    {name = "aiperceivable", email = "tercel.yi@gmail.com"}
 ]
 license = "Apache-2.0"
 keywords = ["ai", "agent", "orchestration", "demo", "apflow"]
@@ -80,3 +80,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 asyncio_default_test_loop_scope = "session"
 
+
+[project.urls]
+Homepage = "https://aiperceivable.com"
+Source = "https://github.com/aiperceivable/apcore" 

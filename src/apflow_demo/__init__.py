@@ -1,7 +1,7 @@
 """
 apflow-demo
 
-Demo deployment of apflow with rate limiting and pre-computed results.
+Demo deployment of apflow with session and user management.
 """
 
 import os
@@ -32,9 +32,9 @@ def _initialize_database():
     if not db:
         data_dir = project_root / ".data"
         data_dir.mkdir(parents=True, exist_ok=True)
-        db_path = data_dir / "apflow-demo.duckdb"
+        db_path = data_dir / "apflow-demo.sqlite3"
         
-        os.environ["DATABASE_URL"] = f"duckdb:///{db_path}"
+        os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
 
 _initialize_database()
 

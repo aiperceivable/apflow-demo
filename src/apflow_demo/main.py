@@ -2,7 +2,7 @@
 Main entry point for apflow-demo
 
 This is the demo application layer that extends apflow with
-quota management, rate limiting, and demo task initialization features.
+demo session and user management features.
 
 Follows the structure pattern from apflow/api/main.py for consistency.
 """
@@ -43,79 +43,11 @@ def _load_environment_variables():
         logger.debug(f"Loaded environment variables from {env_file}")
 
 
-def _initialize_database_tables():
-    """Initialize database tables for quota tracking if rate limiting is enabled"""
-    
-    if not settings.rate_limit_enabled:
-        return
-    
-    try:
-        from apflow.core.storage import get_default_session
-        from apflow_demo.storage.models import (
-            QuotaCounter,
-            ConcurrencyCounter,
-            TaskTreeTracking,
-            UsageStats,
-        )
-        from apflow.core.storage.sqlalchemy.models import Base
-        
-        # Create tables if they don't exist
-        session = get_default_session()
-        Base.metadata.create_all(bind=session.bind, checkfirst=True)
-        logger.info("Initialized quota tracking database tables")
-    except Exception as e:
-        logger.warning(f"Failed to initialize quota tracking tables: {e}")
-
-
-def _register_quota_hooks():
-    """Register quota tracking hooks if rate limiting is enabled"""
-    if not settings.rate_limit_enabled:
-        return
-    
-    # Register task tree lifecycle hook
-    try:
-        from apflow import register_task_tree_hook
-        from apflow_demo.extensions.quota_hooks import quota_tracking_on_tree_completed
-        
-        registered_hook = register_task_tree_hook("on_tree_completed")(quota_tracking_on_tree_completed)
-        logger.info("Registered quota tracking task tree lifecycle hook")
-    except Exception as e:
-        logger.warning(f"Failed to register task tree lifecycle hook: {e}")
-    
-    # Register executor-specific hooks for LLM executors
-    try:
-        from apflow.core.extensions.registry import add_executor_hook
-        from apflow_demo.extensions.quota_executor_hooks import quota_check_pre_hook
-        
-        # Register for LLM-consuming executors
-        llm_executors = [
-            "crewai_executor",
-            "generate_executor",
-            "openai_executor",
-            "anthropic_executor",
-            "llm_executor",
-        ]
-        
-        for executor_id in llm_executors:
-            try:
-                add_executor_hook(executor_id, "pre_hook", quota_check_pre_hook)
-                logger.debug(f"Registered quota check hook for {executor_id}")
-            except Exception as e:
-                # Executor may not be registered yet, that's OK
-                logger.debug(f"Could not register hook for {executor_id}: {e}")
-    except Exception as e:
-        logger.warning(f"Failed to register executor hooks: {e}")
-
-
 def start_server() -> None:
     """
     Start the demo API server
     
-    Uses apflow's create_runnable_app() with:
-    - auto_initialize_extensions=True: Automatically initializes extensions
-    - QuotaLimitMiddleware: Handles quota checking and task tree tracking
-    
-    Then registers demo-specific hooks and middleware.
+    Initializes the demo ASGI application and starts uvicorn.
     """
 
     print("Starting apflow-demo service...")
@@ -124,19 +56,8 @@ def start_server() -> None:
     # Load environment variables
     _load_environment_variables()
     
-    # Initialize database tables for quota tracking (before creating app)
-    _initialize_database_tables()
-    
-    # Create demo application
-    # create_demo_app() will use create_runnable_app() with auto_initialize_extensions=True
-    # This automatically initializes extensions and loads custom TaskModel
-    # QuotaLimitMiddleware handles quota checking and task tree tracking
     app = create_demo_app()
-    
-    # Register quota tracking hooks after app creation
-    # Hooks must be registered after extensions are initialized (which happens in create_demo_app)
-    _register_quota_hooks()
-    
+
     # Log startup time
     startup_time = time.time() - start_time
     logger.info(f"Service initialization completed in {startup_time:.2f} seconds")
@@ -146,8 +67,6 @@ def start_server() -> None:
     port = settings.apflow_api_port
     
     logger.info(f"Starting apflow-demo on {host}:{port}")
-    logger.info(f"Demo mode: {settings.demo_mode}")
-    logger.info(f"Rate limiting: {settings.rate_limit_enabled}")
     
     # Run server
     uvicorn.run(

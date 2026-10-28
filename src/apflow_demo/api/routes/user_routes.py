@@ -23,7 +23,7 @@ def _check_admin_auth(request: Request) -> bool:
     
     If .env has no APFLOW_JWT_SECRET, allows admin tokens from CLI config.
     """
-    from apflow.api.a2a.server import verify_token
+    from apflow_demo.utils.jwt_utils import verify_token
     from pathlib import Path
     import yaml
     import os

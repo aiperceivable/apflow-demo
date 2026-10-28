@@ -2,8 +2,7 @@
 API middleware module
 """
 
-from apflow_demo.api.middleware.rate_limit import RateLimitMiddleware
-from apflow_demo.api.middleware.demo_mode import DemoModeMiddleware
+from apflow_demo.api.middleware.session_cookie import SessionCookieMiddleware
 
-__all__ = ["RateLimitMiddleware", "DemoModeMiddleware"]
+__all__ = ["SessionCookieMiddleware"]
 

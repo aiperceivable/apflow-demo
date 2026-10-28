@@ -4,13 +4,13 @@ CLI extension for user management and statistics
 
 import asyncio
 import json
+import os
 from typing import Optional
 
 import typer
 from rich.console import Console
 from rich.table import Table
 from sqlalchemy.ext.asyncio import AsyncSession
-from apflow.cli import CLIExtension, cli_register
 from apflow_demo.services.user_service import user_tracking_service
 
 # Initialize UI
@@ -20,8 +20,7 @@ console = Console()
 # This automatically registers with apflow CLI without entry points
 
 
-@cli_register(name="users", help="Manage and analyze users")
-class UsersApp(CLIExtension):
+class UsersApp(typer.Typer):
     """CLI extension for user management."""
 
     def __init__(self):
@@ -52,17 +51,13 @@ class UsersApp(CLIExtension):
 
         try:
             # Try to use API server if configured
-            from apflow.core.config_manager import get_config_manager
             try:
                 import httpx
             except ImportError:
                 httpx = None
             
-            config_manager = get_config_manager()
-            # Load CLI config to ensure it's read from config.cli.yaml
-            config_manager.load_cli_config()
-            api_server_url = config_manager.get_api_server_url()
-            auth_token = config_manager.get_admin_auth_token()
+            api_server_url = os.getenv("APFLOW_DEMO_API_URL")
+            auth_token = os.getenv("APFLOW_DEMO_ADMIN_TOKEN")
             
             if api_server_url and httpx:
                 # Use API to query stats
@@ -132,17 +127,13 @@ class UsersApp(CLIExtension):
         """
         try:
             # Try to use API server if configured
-            from apflow.core.config_manager import get_config_manager
             try:
                 import httpx
             except ImportError:
                 httpx = None
             
-            config_manager = get_config_manager()
-            # Load CLI config to ensure it's read from config.cli.yaml
-            config_manager.load_cli_config()
-            api_server_url = config_manager.get_api_server_url()
-            auth_token = config_manager.get_admin_auth_token()
+            api_server_url = os.getenv("APFLOW_DEMO_API_URL")
+            auth_token = os.getenv("APFLOW_DEMO_ADMIN_TOKEN")
             
             if api_server_url and httpx:
                 # Use API to query users

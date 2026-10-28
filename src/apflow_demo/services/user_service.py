@@ -29,14 +29,11 @@ class UserTrackingService:
             # Helper to run sync metadata creation
             def _create_all(conn):
                 Base.metadata.create_all(conn)
-                # Check if user_agent column exists, add it if not
-                # DuckDB/PostgreSQL support basic ALTER TABLE
-                try:
+                # Avoid a failed DDL statement aborting PostgreSQL's transaction.
+                columns = {column["name"] for column in inspect(conn).get_columns("demo_users")}
+                if "user_agent" not in columns:
                     conn.execute(text("ALTER TABLE demo_users ADD COLUMN user_agent VARCHAR"))
                     logger.info("Added user_agent column to demo_users table")
-                except Exception:
-                    # Column likely already exists
-                    pass
 
             if isinstance(session, AsyncSession):
                 async with engine.begin() as conn:

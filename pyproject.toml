@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apflow-demo"
-version = "0.7.1"
-description = "Demo deployment of apflow with rate limiting and pre-computed results"
+version = "0.8.0"
+description = "Demo A2A deployment of apflow with session and user management"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
     {name = "aiperceivable", email = "tercel.yi@gmail.com"}
 ]
@@ -17,19 +17,24 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 
 # Core dependencies
 dependencies = [
-    "apflow[all]>=0.17.0",  # Core library (includes database support)
+    "apflow[all]>=0.24.1",  # Core library (includes database support)
     "fastapi>=0.115.0",              # API framework (already included in a2a, but explicit)
     "python-dotenv>=1.0.0",          # Environment variables
     "pydantic>=2.0.0",                # Data validation
     "pydantic-settings>=2.0.0",      # Settings management
+    "PyJWT>=2.0.0",
+    "PyYAML>=6.0.0",
+    "rich>=13.0.0",
+    "sqlalchemy>=2.0.0",
     "sqlalchemy-session-proxy>=0.1.0",
+    "typer>=0.12.0,<0.16.0",
+    "uvicorn>=0.30.0",
 ]
 
 [project.optional-dependencies]
@@ -44,12 +49,8 @@ dev = [
     "apscheduler>=3.10.0",
 ]
 
-#[project.scripts]
-#apflow-demo = "apflow_demo.cli:main"
-
-[project.entry-points."apflow.cli_plugins"]
-users = "apflow_demo.cli.users:users_app"
-serve = "apflow_demo.cli.serve:serve_app"
+[project.scripts]
+apflow-demo = "apflow_demo.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -60,14 +61,14 @@ apflow_demo = ["config/*.yaml", "config/*.yml"]
 
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312']
+target-version = ['py311', 'py312']
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 

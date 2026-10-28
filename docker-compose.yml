@@ -14,10 +14,6 @@ services:
       - ./.env:/app/.env
     # Set default values if .env file doesn't exist or variables are not set
     environment:
-      - DEMO_MODE=${DEMO_MODE:-true}
-      - RATE_LIMIT_ENABLED=${RATE_LIMIT_ENABLED:-true}
-      - RATE_LIMIT_DAILY_PER_USER=${RATE_LIMIT_DAILY_PER_USER:-10}
-      - RATE_LIMIT_DAILY_PER_IP=${RATE_LIMIT_DAILY_PER_IP:-50}
       - APFLOW_API_PROTOCOL=${APFLOW_API_PROTOCOL:-a2a}
       - APFLOW_API_HOST=${APFLOW_API_HOST:-0.0.0.0}
       - APFLOW_API_PORT=${APFLOW_API_PORT:-8000}

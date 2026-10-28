@@ -84,7 +84,16 @@ class SessionCookieMiddleware(BaseHTTPMiddleware):
         except Exception as e:
             logger.error(f"Failed to track user activity: {e}")
         
-        # Process request (apflow's JWT middleware will read token from cookie automatically)
+        # The apcore A2A authenticator accepts bearer tokens, so forward the
+        # session cookie when the client did not provide an Authorization header.
+        if jwt_token and not request.headers.get("authorization"):
+            request.scope["headers"] = [
+                *request.scope["headers"],
+                (b"authorization", f"Bearer {jwt_token}".encode("ascii")),
+            ]
+            if hasattr(request, "_headers"):
+                del request._headers
+
         response = await call_next(request)
         
         # Set cookie if not already set or if new token was generated (persistent for 1 year)

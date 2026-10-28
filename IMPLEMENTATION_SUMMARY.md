@@ -1,3 +1,5 @@
+> Historical document: the legacy quota and demo-task features described here were removed during the apflow 0.24.1 upgrade. See README.md for the current behavior.
+
 # Implementation Summary
 
 ## Completed Implementation

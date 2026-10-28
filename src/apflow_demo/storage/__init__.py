@@ -1,22 +1,8 @@
 """
-Storage module for quota and rate limiting
-
-Uses the same database as apflow (DuckDB/PostgreSQL).
+Storage models for demo users and tasks.
 """
 
-from apflow_demo.storage.models import (
-    QuotaCounter,
-    ConcurrencyCounter,
-    TaskTreeTracking,
-    UsageStats,
-)
-from apflow_demo.storage.quota_repository import QuotaRepository
+from apflow_demo.storage.models import CustomTaskModel, DemoUser
 
-__all__ = [
-    "QuotaCounter",
-    "ConcurrencyCounter",
-    "TaskTreeTracking",
-    "UsageStats",
-    "QuotaRepository",
-]
+__all__ = ["CustomTaskModel", "DemoUser"]
 

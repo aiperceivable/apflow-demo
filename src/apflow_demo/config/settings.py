@@ -18,26 +18,6 @@ class DemoSettings(BaseSettings):
         extra="ignore",
     )
     
-    # Demo mode
-    demo_mode: bool = os.getenv("DEMO_MODE", "false").lower() in ("true", "1", "yes")
-    rate_limit_enabled: bool = os.getenv("RATE_LIMIT_ENABLED", "false").lower() in ("true", "1", "yes")
-    
-    # Rate limiting
-    rate_limit_daily_per_user: int = int(os.getenv("RATE_LIMIT_DAILY_PER_USER", "10"))
-    rate_limit_daily_per_ip: int = int(os.getenv("RATE_LIMIT_DAILY_PER_IP", "50"))
-    
-    # LLM-consuming task tree limits
-    rate_limit_daily_llm_per_user: int = int(os.getenv("RATE_LIMIT_DAILY_LLM_PER_USER", "1"))  # Free users: only 1 LLM-consuming task tree
-    rate_limit_daily_per_user_premium: int = int(os.getenv("RATE_LIMIT_DAILY_PER_USER_PREMIUM", "10"))  # Premium users: 10 total (no separate LLM limit)
-    
-    # Concurrency limits
-    max_concurrent_task_trees: int = int(os.getenv("MAX_CONCURRENT_TASK_TREES", "10"))  # System-wide
-    max_concurrent_task_trees_per_user: int = int(os.getenv("MAX_CONCURRENT_TASK_TREES_PER_USER", "1"))  # Per-user
-    
-    # Redis
-    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
-    redis_db: int = int(os.getenv("REDIS_DB", "0"))
-    
     # apflow configuration (passed through)
     apflow_api_protocol: str = os.getenv("APFLOW_API_PROTOCOL", "a2a")
     apflow_api_host: str = os.getenv("APFLOW_API_HOST", os.getenv("API_HOST", "0.0.0.0"))
